@@ -26,6 +26,9 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Grant execute permission to mvnw
+        run: chmod +x ./mvnw
+
       - name: Build Quarkus Native Image
         run: |
           ./mvnw compile quarkus:build
