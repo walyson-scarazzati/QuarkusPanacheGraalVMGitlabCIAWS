@@ -4,6 +4,7 @@ import java.util.List;
 
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -26,7 +27,7 @@ public class CategoriaResource {
     
     @POST
     @Transactional
-    public Categoria salvarCategoria(Categoria categoria) {
+    public Categoria salvarCategoria(@Valid Categoria categoria) {
 		categoria.persist();
 		return categoria;
 	}

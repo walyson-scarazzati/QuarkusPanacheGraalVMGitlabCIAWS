@@ -1,0 +1,50 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deployProduction:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          version: '22.3.0'
+          java-version: '21'
+          components: 'native-image'
+
+      - name: Set up Maven
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build Quarkus Native Image
+        run: |
+          ./mvnw compile quarkus:build
+          ./mvnw package -Pnative
+
+      - name: Install Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Copy native binary to VM
+        run: |
+          gcloud compute scp ./target/crud-quarkus-panache-entity-1.0.0-runner \
+            ${{ secrets.GCP_VM_USER }}@${{ secrets.GCP_VM_INSTANCE }}:/home/${{ secrets.GCP_VM_USER }}/nativo \
+            --zone=${{ secrets.GCP_VM_ZONE }} --quiet
+
+      - name: Run remote script on VM
+        run: |
+          gcloud compute ssh ${{ secrets.GCP_VM_USER }}@${{ secrets.GCP_VM_INSTANCE }} \
+            --zone=${{ secrets.GCP_VM_ZONE }} --command="bash /home/${{ secrets.GCP_VM_USER }}/nativo/subir.sh"
