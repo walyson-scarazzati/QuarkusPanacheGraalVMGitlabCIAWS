@@ -60,4 +60,4 @@ jobs:
       - name: Run remote script on VM
         run: |
           gcloud compute ssh ${{ secrets.GCP_VM_USER }}@${{ secrets.GCP_VM_INSTANCE }} \
-            --zone=${{ secrets.GCP_VM_ZONE }} --command="chmod +x /home/${{ secrets.GCP_VM_USER }}/subir.sh"
+          --zone=${{ secrets.GCP_VM_ZONE }} --command="sudo chown $USER:$USER /home/$USER/subir.sh && chmod +x /home/$USER/subir.sh"
