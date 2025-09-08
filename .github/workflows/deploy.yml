@@ -53,7 +53,7 @@ jobs:
 
       - name: Copy native binary to VM
         run: |
-          gcloud compute scp ./target/crud-quarkus-panache-entity-1.0.0-runner \
+          gcloud compute scp ./target/curso.projeto-1.0.0-runner \
             ${{ secrets.GCP_VM_USER }}@${{ secrets.GCP_VM_INSTANCE }}:/home/${{ secrets.GCP_VM_USER }}/nativo \
             --zone=${{ secrets.GCP_VM_ZONE }} --quiet
 
