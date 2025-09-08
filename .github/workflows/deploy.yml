@@ -54,10 +54,10 @@ jobs:
       - name: Copy native binary to VM
         run: |
           gcloud compute scp ./target/curso.projeto-1.0.0-runner \
-            ${{ secrets.GCP_VM_USER }}@${{ secrets.GCP_VM_INSTANCE }}:/home/${{ secrets.GCP_VM_USER }}/nativo \
+            ${{ secrets.GCP_VM_USER }}@${{ secrets.GCP_VM_INSTANCE }}:/home/${{ secrets.GCP_VM_USER }} \
             --zone=${{ secrets.GCP_VM_ZONE }} --quiet
 
       - name: Run remote script on VM
         run: |
           gcloud compute ssh ${{ secrets.GCP_VM_USER }}@${{ secrets.GCP_VM_INSTANCE }} \
-            --zone=${{ secrets.GCP_VM_ZONE }} --command="bash /home/${{ secrets.GCP_VM_USER }}/nativo/subir.sh"
+            --zone=${{ secrets.GCP_VM_ZONE }} --command="chmod +x /home/${{ secrets.GCP_VM_USER }}/subir.sh"
