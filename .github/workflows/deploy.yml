@@ -61,6 +61,6 @@ jobs:
           gcloud compute ssh ${{ secrets.GCP_VM_USER }}@${{ secrets.GCP_VM_INSTANCE }} \
           --zone=${{ secrets.GCP_VM_ZONE }} \
           --command="export DB_USERNAME='${{ secrets.DB_USERNAME }}' && \
-                     export DB_PASSWORD='${{ secrets.DB_PASSWORD }}' && \
-                     export DB_URL='${{ secrets.DB_URL }}' && \
-                     java -jar /home/${{ secrets.GCP_VM_USER }}/quarkus-app/quarkus-run.jar"
+               export DB_PASSWORD='${{ secrets.DB_PASSWORD }}' && \
+               export DB_URL='${{ secrets.DB_URL }}' && \
+               nohup java -jar /home/${{ secrets.GCP_VM_USER }}/quarkus-app/quarkus-run.jar > app.log 2>&1 &"
