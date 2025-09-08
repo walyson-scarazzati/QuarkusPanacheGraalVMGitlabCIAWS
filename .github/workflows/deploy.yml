@@ -29,10 +29,9 @@ jobs:
       - name: Grant execute permission to mvnw
         run: chmod +x ./mvnw
 
-      - name: Build Quarkus Native Image
+      - name: Build Quarkus JAR
         run: |
-          ./mvnw compile quarkus:build
-          ./mvnw package -Pnative
+          ./mvnw clean package
 
       - name: Install Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
@@ -51,13 +50,17 @@ jobs:
       - name: Set active account
         run: gcloud config set account ${{ secrets.GCP_SA_EMAIL }}
 
-      - name: Copy native binary to VM
+      - name: Copy JAR to VM
         run: |
-          gcloud compute scp ./target/curso.projeto-1.0.0-runner \
+          gcloud compute scp ./target/curso.projeto-1.0.0.jar \
             ${{ secrets.GCP_VM_USER }}@${{ secrets.GCP_VM_INSTANCE }}:/home/${{ secrets.GCP_VM_USER }} \
             --zone=${{ secrets.GCP_VM_ZONE }} --quiet
 
-      - name: Run remote script on VM again
+      - name: Run JAR on VM with DB secrets
         run: |
           gcloud compute ssh ${{ secrets.GCP_VM_USER }}@${{ secrets.GCP_VM_INSTANCE }} \
-          --zone=${{ secrets.GCP_VM_ZONE }} --command="sudo chown ${{ secrets.GCP_VM_USER }}:${{ secrets.GCP_VM_USER }} /home/${{ secrets.GCP_VM_USER }}/subir.sh && chmod +x /home/${{ secrets.GCP_VM_USER }}/subir.sh"
+          --zone=${{ secrets.GCP_VM_ZONE }} \
+          --command="export DB_USERNAME='${{ secrets.DB_USERNAME }}' && \
+                     export DB_PASSWORD='${{ secrets.DB_PASSWORD }}' && \
+                     export DB_URL='${{ secrets.DB_URL }}' && \
+                     java -jar /home/${{ secrets.GCP_VM_USER }}/curso.projeto-1.0.0.jar"
