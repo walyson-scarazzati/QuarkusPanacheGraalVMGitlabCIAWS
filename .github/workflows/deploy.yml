@@ -50,17 +50,17 @@ jobs:
       - name: Set active account
         run: gcloud config set account ${{ secrets.GCP_SA_EMAIL }}
 
-      - name: Copy JAR to VM
+      - name: Copy Quarkus app to VM
         run: |
-          gcloud compute scp ./target/curso.projeto-1.0.0.jar \
+          gcloud compute scp --recurse ./target/quarkus-app \
             ${{ secrets.GCP_VM_USER }}@${{ secrets.GCP_VM_INSTANCE }}:/home/${{ secrets.GCP_VM_USER }} \
             --zone=${{ secrets.GCP_VM_ZONE }} --quiet
 
-      - name: Run JAR on VM with DB secrets
+      - name: Run Quarkus app on VM with DB secrets
         run: |
           gcloud compute ssh ${{ secrets.GCP_VM_USER }}@${{ secrets.GCP_VM_INSTANCE }} \
           --zone=${{ secrets.GCP_VM_ZONE }} \
           --command="export DB_USERNAME='${{ secrets.DB_USERNAME }}' && \
                      export DB_PASSWORD='${{ secrets.DB_PASSWORD }}' && \
                      export DB_URL='${{ secrets.DB_URL }}' && \
-                     java -jar /home/${{ secrets.GCP_VM_USER }}/curso.projeto-1.0.0.jar"
+                     java -jar /home/${{ secrets.GCP_VM_USER }}/quarkus-app/quarkus-run.jar"
