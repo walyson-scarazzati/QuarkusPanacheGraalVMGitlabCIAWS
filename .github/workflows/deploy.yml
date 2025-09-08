@@ -63,4 +63,4 @@ jobs:
           --command="export DB_USERNAME='${{ secrets.DB_USERNAME }}' && \
                export DB_PASSWORD='${{ secrets.DB_PASSWORD }}' && \
                export DB_URL='${{ secrets.DB_URL }}' && \
-               nohup java -jar /home/${{ secrets.GCP_VM_USER }}/quarkus-app/quarkus-run.jar > app.log 2>&1 &"
+               bash ./subir.sh"
