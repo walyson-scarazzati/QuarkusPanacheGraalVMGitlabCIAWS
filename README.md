@@ -1,4 +1,5 @@
 # curso.projeto
+This project is based on the Udemy course "Quarkus com Panache, GraalVM, GitlabCI e AWS": https://www.udemy.com/course/quarkus-com-panache-graalvm-gitlabci-e-aws. Instead of using GitLab CI, I used GitHub Actions, and instead of AWS, I used Google Cloud. Database PostgreSQL used also Google Cloud. Original repository: https://gitlab.com/curso-quarkus/crud-quarkus-panache-entity.
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
@@ -12,7 +13,7 @@ You can run your application in dev mode that enables live coding using:
 ./mvnw quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>. Or Swagger http://localhost:8080/swagger-ui/
 
 ## Packaging and running the application
 
